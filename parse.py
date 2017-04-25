@@ -11,10 +11,11 @@ def str2int(s):
             s1 += ch
     return int(s1)
 
-groups = [0]*101
-lePenGroups = [0.0]*101
-lePenCountGroups = [0.0]*101
-countGroups = [0.0]*101
+nGroups = 1000
+groups = [0]*(nGroups + 1)
+lePenGroups = [0.0]*(nGroups + 1)
+lePenCountGroups = [0.0]*(nGroups + 1)
+countGroups = [0.0]*(nGroups + 1)
 votedGroups = [0]*10
 communes = 0
 
@@ -33,7 +34,7 @@ for i in xrange(len(fnames)):
         if fnames[i] != "FE.html":
             leaves.append(fnames[i])
 
-raw = True
+raw = False
 if raw:
     print("Voters\tVoted\tLe Pen\tMacron\tFilename")
 
@@ -64,13 +65,13 @@ data)
                 cMacron = str2int(mMacron[0])
                 if raw:
                     print("%d\t%d\t%d\t%d\t%s" % (cAll, cVoted, cLePen, cMacron, f))
-                cLePen = cMacron
+                # cLePen = cMacron
                 lePen = float(cLePen)/cVoted
                 # print("%f\t%f" % (turnout, lePen))
-                group = int(turnout*100)
-                if False:
-                    if group == 80:
-                        print("%s\t%f\t%f" % (f, turnout, cAll))
+                group = int(turnout*nGroups)
+                if True:
+                    if group == 800:
+                        print >>sys.stderr, "%s\t%f\t%f" % (f, turnout, cAll)
                 groups[group] += 1
                 lePenGroups[group] += lePen
                 lePenCountGroups[group] += cLePen
@@ -80,7 +81,8 @@ data)
 print >>sys.stderr, "Communes = %d" % communes
 
 if True and not raw:
-    for i in xrange(101):
+    print("Group\tShare\tCGroups\tSum\tCAllGroups")
+    for i in xrange(nGroups + 1):
         if 0 != groups[i]:
             print "%f\t%f\t%f\t%f\t%f" % (i, lePenGroups[i]/groups[i], groups[i], lePenCountGroups[i], countGroups[i])
 
